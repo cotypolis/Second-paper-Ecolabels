@@ -1,0 +1,111 @@
+---
+title: "SEM Item Identification 05122023"
+author: "Constanza Avalos"
+date: "2023-12-05"
+date: "2023-12-01"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Definitions
+
+There are different types of Structural equation modelling: 1) observed to observed variables (e.g., regression), 2) latent to observed variables (e.g., confirmatory factor analysis), and 3) latent to latent variables (e.g. structural regression).
+
+The most common models that fall under the SEM framework including: 
+
+1) simple regression
+2) multiple regression
+3) multivariate regression
+4) path analysis
+5) confirmatory factor analysis
+6) structural regression
+
+Observed variables: a variable that exists in the data, item or manifest variable.
+latent variable: a variable that is constructed ad does not exist in the data.
+exogenous variable: an independent variable either observed or latent that explains and endogenous variable. 
+endogenous variable: a dependent variable, either observed or latent that has a causal path leading to it.
+measurement model: a model that links observed variables with latent variables.
+indicator: an observed variable in a measurement model (could exo o endo).
+factor: a latent variable defined by its indicators (could be exo o endo).
+structural model: a model that specifies causal relationships among exogenous variables to endogenous variables (could be observed or latent)
+regression path: a path between exogenous and endogenous variables (could be observed and latent)
+
+courses: https://app.datacamp.com/learn/courses/structural-equation-modeling-with-lavaan-in-r
+courses: https://www.udemy.com/course/structural-equation-modeling-sem-with-lavaan/?utm_source=adwords&utm_medium=udemyads&utm_campaign=Webindex_Catchall_la.EN_cc.UK&utm_term=_._ag_114213220700_._ad_532713168388_._kw__._de_c_._dm__._pl__._ti_dsa-404285868850_._li_1006912_._pd__._&matchtype=&gad_source=1&gclid=CjwKCAiApaarBhB7EiwAYiMwqklWBOntOPQPhzdnlEFbS-slsZQ8I-AdVsatT-FZEbq0p4I57tKcmBoC2GUQAvD_BwE
+
+Book: Handbook of structural equation modeling by Rick H. Hoyle. link: https://web-s-ebscohost-com.manchester.idm.oclc.org/ehost/detail/detail?vid=0&sid=6863a124-0528-4756-8a45-fe4865bbb437%40redis&bdata=JnNpdGU9ZWhvc3QtbGl2ZQ%3d%3d#AN=3453312&db=nlebk
+
+Tutorial: https://rpubs.com/arinbasu/lavaan_tutorial
+
+
+```{r cars}
+summary(cars)
+```
+
+## Definitions and SEM steps
+
+To develop a Structural Equation Model (SEM), you need to identify both observed variables and latent variables. Observed variables are directly measured, while latent variables are unobserved and inferred from the observed variables. Here are the steps to identify them:
+Identifying Observed Variables:
+*Start by defining the concepts or constructs in your research.
+*Determine the variables that directly represent these concepts and can be measured.
+Identifying Latent Variables:
+*Look for concepts that are important but cannot be measured directly.
+*Consider if there are multiple observed variables that are related and may be caused by an underlying, unobserved variable.
+Using Theory and Previous Research:
+*Draw on existing theory and research to identify potential latent variables.
+*Consider what is known about the relationships between the observed variables and how they might be caused by underlying, unobserved variables.
+Confirming Latent Variables:
+*Use statistical techniques such as Confirmatory Factor Analysis (CFA) to confirm the presence of latent variables and their relationships with observed variables.
+Modeling the Relationships:
+*Once observed and latent variables are identified, you can model the relationships between them using SEM.
+
+## System of paths and directed acyclic graphs (DAGs)
+
+```{r message=FALSE, results='asis'}
+
+mypaths <- dagitty('dag{
+          x [pos = "1,1"]  
+          a [pos = "2,1"]
+          b [pos = "3,1"]
+          c [pos = "2.5,2"]
+          d [pos = "1,2"]
+          e [pos = "1.5,3"]
+          j [pos = "1,4"]
+          y [pos = "2,4"]
+          
+          x -> a 
+          a -> b
+          b -> c 
+          c -> y
+          c -> x
+          x <-> d
+          d <-> j
+          y -> j
+          d -> e -> y
+          
+                   
+}')
+
+plot(mypaths)
+
+mypaths %>%
+  ggdag() +
+  theme_dag_blank() +
+  ggsave("path1.png")
+
+```
+## Input data in the form of a covariance matrix
+
+```{r matrix}
+
+
+```

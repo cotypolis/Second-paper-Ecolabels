@@ -1,0 +1,282 @@
+---
+title: "Food and You analyses_How confident are you that the information on food labels is accurate 01122023"
+author: "Constanza Avalos"
+date: "2023-12-01"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Food and You 2: Waves 1-6, 2020-2023
+
+This is an analysis of the questions on the environmental impact of food from the "Food and You" survey, wave 4. 
+
+The Food and You Surveys (2010-2018), and Food and You 2 (2020- ) are biennial, cross-sectional surveys of adults aged 16 years and over living in England, Wales and Northern Ireland,  commissioned by the Food Standards Agency (FDA). Food and You provides data about the prevalence of different attitudes, reported behaviour and knowledge about ways in which food is purchased, stored, prepared and eaten.
+
+In 2018, the FSA’s Advisory Committee for Social Science (ACSS) recommended that Food and You and the Public Attitudes Tracker were replaced with a new ‘push-to-web’ survey, Food and You 2, which was commissioned in 2019 with data collection commencing in July 2020. Due to differences in the survey methodologies, comparisons cannot be made between the earlier Food and You surveys, or the Public Attitudes Tracker, and Food and You 2. Therefore Food and You 2, 2020 is the start of a new data time series.
+
+The topics cover in the survey are: Trust in FSA and the food supply chain, Concerns about food, Food security, Food shopping and labelling, Online platforms, Food-related behaviours and eating habits. Food and You 2-Wave 4 has module called 
+
+Technical features:
+
+Dates of fieldwork: Wave 1: 28 July - 6 October 2020; Wave 2: 20 November 2020 - 21 January 2021; Wave 3: 28 April - 25 June 2021; Wave 4: 18 October 2021 - 10 January 2022; Wave 5: 26 April - 24 July 2022. Wave 6: 12 October 2022 - 10 January 2023
+
+Observation units: Individuals
+
+Number of units:	Wave 1: 9,319 cases; Wave 2: 5,900; Wave 3: 6,271; Wave 4: 5,796; Wave 5: 6,770; Wave 6: 5,991
+
+Method of data collection: a) Self-administered questionnaire: Web-based (CAWI) and b) Self-administered questionnaire: Paper
+
+Time dimensions: Repeated cross-sectional study
+
+Sampling procedures: Multi-stage stratified random sample
+
+Weighting: Weighting used. See documentation for details
+
+
+```{r dataset}
+
+library(readxl)
+Wave_1 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 1.xlsx")
+Wave_2 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 2.xlsx")
+Wave_3 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 3.xlsx")
+Wave_4 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 4.xlsx")
+Wave_5 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 5.xlsx")
+Wave_6 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 6.xlsx")
+
+```
+## Grouped plots
+
+How confident are you that the information on food labels is accurate (e.g. ingredients, nutritional information, country of origin)? (Single answer), all waves.
+
+```{r accurate2, echo=FALSE}
+
+par(mfrow=c(2,2))
+
+
+library(scales)
+barplot(table(Wave_1$foodconf_b)/length(Wave_1$foodconf_b) * 100,
+        main = "Wave 1",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very confident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+library(scales)
+barplot(table(Wave_2$foodconf_b)/length(Wave_2$foodconf_b) * 100,
+        main = "Wave 2",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not \napplicable", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_3$foodconf_b)/length(Wave_3$foodconf_b) * 100,
+        main = "Wave 3",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+library(scales)
+barplot(table(Wave_4$foodconf_b)/length(Wave_4$foodconf_b) * 100,
+        main = "Wave 4",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not \napplicable", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+library(scales)
+barplot(table(Wave_5$foodconf_b)/length(Wave_5$foodconf_b) * 100,
+        main = "Wave 5",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_6$foodconf_b)/length(Wave_6$foodconf_b) * 100,
+        main = "Wave 6",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## Single Plots
+
+Q30, 40 Q31 Q36 How confident are you that the information on food labels is accurate (e.g. ingredients, nutritional information, country of origin)? (Single answer), all waves.
+
+```{r accurate, echo=FALSE}
+
+barplot(table(Wave_1$foodconf_b),
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 1",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Very confident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_1$foodconf_b)/length(Wave_1$foodconf_b) * 100,
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 1",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very confident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_2$foodconf_b),
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 2",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not \napplicable","Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_2$foodconf_b)/length(Wave_2$foodconf_b) * 100,
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 2",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not \napplicable", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_3$foodconf_b),
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 3",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_3$foodconf_b)/length(Wave_3$foodconf_b) * 100,
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 3",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$foodconf_b),
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 4",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not \napplicable", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_4$foodconf_b)/length(Wave_4$foodconf_b) * 100,
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 4",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not \napplicable", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_5$foodconf_b),
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 5",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_5$foodconf_b)/length(Wave_5$foodconf_b) * 100,
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 5",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_6$foodconf_b),
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 6",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_6$foodconf_b)/length(Wave_6$foodconf_b) * 100,
+        main = "How confident are you that the information on food labels is accurate \n
+        (e.g. ingredients, nutritional information, country of origin)? Wave 6",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Very \nconfident", "Fairly \nconfident", "Not very \nconfident", "Not at all \nconfident", "It varies", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+
+```
+
+
+
+

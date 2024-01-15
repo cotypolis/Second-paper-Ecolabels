@@ -1,0 +1,1390 @@
+---
+title: "Food and You analyses_enviroment impact 27112023"
+author: "Constanza Avalos"
+date: "2023-11-27"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Food and You 2: Waves 1-6, 2020-2023
+
+This is an analysis of the questions on the environmental impact of food from the "Food and You" survey, wave 4. 
+
+The Food and You Surveys (2010-2018), and Food and You 2 (2020- ) are biennial, cross-sectional surveys of adults aged 16 years and over living in England, Wales and Northern Ireland,  commissioned by the Food Standards Agency (FDA). Food and You provides data about the prevalence of different attitudes, reported behaviour and knowledge about ways in which food is purchased, stored, prepared and eaten.
+
+In 2018, the FSA’s Advisory Committee for Social Science (ACSS) recommended that Food and You and the Public Attitudes Tracker were replaced with a new ‘push-to-web’ survey, Food and You 2, which was commissioned in 2019 with data collection commencing in July 2020. Due to differences in the survey methodologies, comparisons cannot be made between the earlier Food and You surveys, or the Public Attitudes Tracker, and Food and You 2. Therefore Food and You 2, 2020 is the start of a new data time series.
+
+The topics cover in the survey are: Trust in FSA and the food supply chain, Concerns about food, Food security, Food shopping and labelling, Online platforms, Food-related behaviours and eating habits. Food and You 2-Wave 4 has added the module "Food shopping: sustainability and environmental impact", which contains questions about eco-labels.  
+
+Technical features:
+
+Dates of fieldwork: Wave 1: 28 July - 6 October 2020; Wave 2: 20 November 2020 - 21 January 2021; Wave 3: 28 April - 25 June 2021; Wave 4: 18 October 2021 - 10 January 2022; Wave 5: 26 April - 24 July 2022. Wave 6: 12 October 2022 - 10 January 2023
+
+Observation units: Individuals
+
+Number of units:	Wave 1: 9,319 cases; Wave 2: 5,900; Wave 3: 6,271; Wave 4: 5,796; Wave 5: 6,770; Wave 6: 5,991
+
+Method of data collection: a) Self-administered questionnaire: Web-based (CAWI) and b) Self-administered questionnaire: Paper
+
+Time dimensions: Repeated cross-sectional study
+
+Sampling procedures: Multi-stage stratified random sample
+
+Weighting: Weighting used. See documentation for details
+
+
+```{r import data}
+
+library(readxl)
+Wave_4 <- read_excel("C:/Users/const/OneDrive/Desktop/PhD/R/Food and You 2 Waves 1-6, 2020-2023/Wave 4.xlsx")
+```
+
+## Dataset descriptives
+
+
+```{r descriptives}
+
+head(Wave_4)
+str((Wave_4))
+
+library(skimr)
+skim(Wave_4, mode_dv, country, Region_dv, imd, urban, nadults, nchildren, ntotalhh, AgeBand_dv, gender_dv, defra9_1, defra10_1, defra4_2, defra5_2)
+
+
+```
+
+## How important is it to you to buy food which has a low environmental impact?
+
+
+```{r questions}
+
+barplot(table(Wave_4$defra9_1),
+        main = "How important is it to you to buy food which has a low environmental impact?",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not Applicable", "Very important", "Somewhat \nimportant", "Not very \nimportant", "Not at all \nimportant", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+library(scales)
+barplot(table(Wave_4$defra9_1)/length(Wave_4$defra9_1) * 100,
+        main = "How important is it to you to buy food which has a low environmental impact?", 
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Very important", "Somewhat \nimportant", "Not very \nimportant", "Not at all \nimportant", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$defra10_1)/length(Wave_4$defra10_1) * 100,
+        main = "How often do you buy food which has a low environmental impact, where possible?", 
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Always", "Most of \nthe time", "About \nhalf the time", "Occasi\nonally", "Never", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra4_2)/length(Wave_4$defra4_2) * 100,
+        main = "When purchasing food, how often do you: Check for information on environmental impact", 
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Always", "Most of \nthe time", "About \nhalf the time", "Occasi\nonally", "Never", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra5_2)/length(Wave_4$defra5_2) * 100,
+        main = "To what extent do you agree/disagree: Food products show enough information \nabout their environmental impact",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Strongly \nagree", "Agree", "Neither agree \nnor disagree", "Disagree", "Strongly \ndisagree", "Don’t know"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## What do you think contributes most to someone having a sustainable diet
+
+```{r contribution}
+
+barplot(table(Wave_4$defra11_1)/length(Wave_4$defra11_1) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nEating a vegetarian diet",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra11_2)/length(Wave_4$defra11_2) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nEating a pescatarian diet",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra11_3)/length(Wave_4$defra11_3) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nEating a vegan diet",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+  
+
+barplot(table(Wave_4$defra11_4)/length(Wave_4$defra11_4) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nEating less meat or poultry or fish",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+  
+barplot(table(Wave_4$defra11_5)/length(Wave_4$defra11_5) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nDrinking less dairy",               xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+  
+barplot(table(Wave_4$defra11_6)/length(Wave_4$defra11_6) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nEating less processed food",               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra11_7)/length(Wave_4$defra11_7) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nEating more fruit and/or vegetables",               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra11_8)/length(Wave_4$defra11_8) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nMinimising food waste",               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$defra11_9)/length(Wave_4$defra11_9) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nNone of these",                            xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra11_10)/length(Wave_4$defra11_10) * 100,
+        main = "What do you think contributes most to someone having a sustainable diet: \nDon’t know",                               xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## What do you think contributes most to someone making sustainable food shopping choices
+
+```{r contribution2}
+
+barplot(table(Wave_4$defra12_1)/length(Wave_4$defra12_1) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBuying animal products with high welfare standards",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_2)/length(Wave_4$defra12_2) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBuying fair trade products",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_3)/length(Wave_4$defra12_3) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBBuying locally produced food or food that is in season",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_4)/length(Wave_4$defra12_4) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBuying foods with minimal or no packaging",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_5)/length(Wave_4$defra12_5) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBuying foods that have been produced with minimal water usage and/or minimal deforestation",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_6)/length(Wave_4$defra12_6) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBuying foods grown organically",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_7)/length(Wave_4$defra12_7) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nBuying sustainably sourced fish",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$defra12_8)/length(Wave_4$defra12_8) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nGrowing fruit and/or vegetables instead of buying them",                               
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$defra12_9)/length(Wave_4$defra12_9) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nNone of these",             xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$defra12_10)/length(Wave_4$defra12_10) * 100,
+        main = "What do you think contributes most to someone making sustainable food shopping choices: \nDon’t know",                xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Note mentioned", "Mentioned"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## Which changes have you made in the last 12 months
+
+```{r changes}
+
+barplot(table(Wave_4$susbehv1)/length(Wave_4$susbehv1) * 100,
+        main = "Which changes have you made in the last 12 months: \nStopped eating meat or poultry or fish completely",                
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to q49
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv1)/length(Wave_4$susbehv2) * 100,
+        main = "Which changes have you made in the last 12 months: \nEaten less meat or poultry or fish",                
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g50
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$susbehv3)/length(Wave_4$susbehv3) * 100,
+        main = "Which changes have you made in the last 12 months: \ndrunk less dairy",                
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$susbehv4)/length(Wave_4$susbehv4) * 100,
+        main = "Which changes have you made in the last 12 months: \nEaten less processed food",                
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(Wave_4$susbehv5)/length(Wave_4$susbehv5) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted eating more fruit and / or vegetables",                  
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv6)/length(Wave_4$susbehv6) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted minimising food waste",                  
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv7)/length(Wave_4$susbehv7) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted growing fruit and / or vegetables",                      
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv8)/length(Wave_4$susbehv8) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying animal products with high welfare standards",                  
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv9)/length(Wave_4$susbehv9) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying fair trade products",                  
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv10)/length(Wave_4$susbehv10) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying locally produced food or food that is in season",                  
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv11)/length(Wave_4$susbehv11) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying foods with minimal or no packaging",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv12)/length(Wave_4$susbehv12) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying foods that have been produced with minimal water usage and / or minimal deforestation",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv13)/length(Wave_4$susbehv13) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying foods grown organically",                         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv14)/length(Wave_4$susbehv14) * 100,
+        main = "Which changes have you made in the last 12 months: \nStarted buying sustainably sourced fish",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv15)/length(Wave_4$susbehv15) * 100,
+        main = "Which changes have you made in the last 12 months: \nOther",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv16)/length(Wave_4$susbehv16) * 100,
+        main = "Which changes have you made in the last 12 months: \nNone of these",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$susbehv17)/length(Wave_4$susbehv17) * 100,
+        main = "Which changes have you made in the last 12 months: \nDon’t know",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #if yes, go to g51
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## What types of meat, poultry and/or fish have you stopped eating in the last 12 months
+
+
+```{r changes2}
+
+yes_subsetQ48 <- subset(Wave_4, susbehv1 == 1) #90obs
+
+barplot(table(yes_subsetQ48$stopmpf1)/length(yes_subsetQ48$stopmpf1) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nRed meat, e.g. beef, pork or lamb",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subsetQ48$stopmpf2)/length(yes_subsetQ48$stopmpf2) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nProcessed meat, e.g. chicken nuggets, ham, bacon, sausages, salami etc",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subsetQ48$stopmpf3)/length(yes_subsetQ48$stopmpf3) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nPoultry, e.g. chicken, turkey, duck etc",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subsetQ48$stopmpf4)/length(yes_subsetQ48$stopmpf4) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nAll fish",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subsetQ48$stopmpf5)/length(yes_subsetQ48$stopmpf5) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nOnly some types of fish",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subsetQ48$stopmpf_net_1)/length(yes_subsetQ48$stopmpf_net_1) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nAny meat",           
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Any meat", "Have not stopped eating meat"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subsetQ48$stopmpf_net_2)/length(yes_subsetQ48$stopmpf_net_2) * 100,
+        main = "What types of meat, poultry and/or fish have you stopped eating in the last 12 months: \nAny fish",           
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Any fish", "Have not stopped eating fish"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## Why did you choose to stop eating red meat in the last 12 months
+
+
+```{r changes3}
+
+yes_subset_redmeat <- subset(Wave_4, stopmpf1 == 1) #66obs
+
+barplot(table(yes_subset_redmeat$whystopm1)/length(yes_subset_redmeat$whystopm1) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nFor animal welfare reasons",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm2)/length(yes_subset_redmeat$whystopm2) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nFor environmental or sustainability reasons, e.g. impact on climate change",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm3)/length(yes_subset_redmeat$whystopm3) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nFor financial reasons, e.g. cost of meat or reduced income",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm4)/length(yes_subset_redmeat$whystopm4) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nFor health reasons, e.g. to be more healthy or lose weight",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm5)/length(yes_subset_redmeat$whystopm5) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nFor religious reasons",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm6)/length(yes_subset_redmeat$whystopm6) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause of the bad or unpleasant physical reaction eating meat causes me (e.g. food intolerance)",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm7)/length(yes_subset_redmeat$whystopm7) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause of concerns about food poisoning",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm8)/length(yes_subset_redmeat$whystopm8) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause other people in my household or my friends have reduced their meat consumption or don’t eat meat",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm9)/length(yes_subset_redmeat$whystopm9) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause of advice from friends or family",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm10)/length(yes_subset_redmeat$whystopm10) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause of advice from celebrities or influencers",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_redmeat$whystopm11)/length(yes_subset_redmeat$whystopm11) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause of concerns about where meat comes from",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm12)/length(yes_subset_redmeat$whystopm12) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nBecause I wanted a change",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm13)/length(yes_subset_redmeat$whystopm13) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nDue to pregnancy",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm14)/length(yes_subset_redmeat$whystopm14) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nOther reason",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm15)/length(yes_subset_redmeat$whystopm15) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nNone of these",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_redmeat$whystopm16)/length(yes_subset_redmeat$whystopm16) * 100,
+        main = "Why did you choose to stop eating red meat in the last 12 months: \nPrefer not to say",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## Why did you choose to stop eating processed meat in the last 12 months
+
+
+```{r pressure, echo=FALSE}
+
+yes_subset_processedmeat <- subset(Wave_4, stopmpf2 == 1) #60obs
+
+barplot(table(yes_subset_processedmeat$whystoppm1)/length(yes_subset_processedmeat$whystoppm1) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nFor animal welfare reasons",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm2)/length(yes_subset_processedmeat$whystoppm2) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nFor environmental or sustainability reasons, e.g. impact on climate change",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm3)/length(yes_subset_processedmeat$whystoppm3) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nFor financial reasons, e.g. cost of meat or reduced income",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm4)/length(yes_subset_processedmeat$whystoppm4) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nFor health reasons, e.g. to be more healthy or lose weight",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm5)/length(yes_subset_processedmeat$whystoppm5) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nFor religious reasons",              
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm6)/length(yes_subset_processedmeat$whystoppm6) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause of the bad or unpleasant physical reaction eating meat causes me (e.g. food intolerance)",         
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm7)/length(yes_subset_processedmeat$whystoppm7) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause of concerns about food poisoning",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm8)/length(yes_subset_processedmeat$whystoppm8) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause other people in my household or my friends have reduced their meat consumption or don’t eat meat",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm9)/length(yes_subset_processedmeat$whystoppm9) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause of advice from friends or family",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm10)/length(yes_subset_processedmeat$whystoppm10) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause of advice from celebrities or influencers",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_processedmeat$whystoppm11)/length(yes_subset_processedmeat$whystoppm11) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause of concerns about where meat comes from",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm12)/length(yes_subset_processedmeat$whystoppm12) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nBecause I wanted a change",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm13)/length(yes_subset_processedmeat$whystoppm13) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nDue to pregnancy",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm14)/length(yes_subset_processedmeat$whystoppm14) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nOther reason",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm15)/length(yes_subset_processedmeat$whystoppm15) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nNone of these",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_processedmeat$whystoppm16)/length(yes_subset_processedmeat$whystoppm16) * 100,
+        main = "Why did you choose to stop eating processed meat in the last 12 months: \nPrefer not to say",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+
+```
+## What types of meat, poultry and/or fish have you eaten less of in the last 12 months
+
+
+```{r pressure2, echo=FALSE}
+
+yes_subset_poultry <- subset(Wave_4, stopmpf3 == 1) #51obs. I decided not to analyse it. Few observations. The same questions. 
+nrow(yes_subset_poultry)
+
+yes_subset_fish <- subset(Wave_4, stopmpf4 == 1) #45obs.
+nrow(yes_subset_fish)
+
+```
+
+## Why did you choose to stop eating poultry or fish in the last 12 months
+
+
+```{r pressure3, echo=FALSE}
+
+barplot(table(Wave_4$lessmpf1)/length(Wave_4$lessmpf1) * 100,
+        main = "What types of meat, poultry and/or fish have you eaten less of in the last 12 months: \nRed meat, e.g. beef, pork or lamb",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #5796 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$lessmpf3)/length(Wave_4$lessmpf3) * 100,
+        main = "What types of meat, poultry and/or fish have you eaten less of in the last 12 months: \nProcessed meat, e.g. chicken nuggets, ham, bacon, sausages, salami etc",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #5796 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$lessmpf4)/length(Wave_4$lessmpf4) * 100,
+        main = "What types of meat, poultry and/or fish have you eaten less of in the last 12 months: \nPoultry, e.g. chicken, turkey, duck etc",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #5796 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$lessmpf5)/length(Wave_4$lessmpf5) * 100,
+        main = "What types of meat, poultry and/or fish have you eaten less of in the last 12 months: \nAll fish",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #5796 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$lessmpf_net_1)/length(Wave_4$lessmpf_net_1) * 100,
+        main = "What types of meat, poultry and/or fish have you eaten less of in the last 12 months: \nAny meat",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #5796 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$lessmpf_net_2)/length(Wave_4$lessmpf_net_2) * 100,
+        main = "What types of meat, poultry and/or fish have you eaten less of in the last 12 months: \nAny fish",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #5796 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+```
+
+## Why did you choose to eat less red meat in the last 12 months
+
+
+```{r pressure4, echo=FALSE}
+
+yes_subset_lessmeat <- subset(Wave_4, lessmpf1 == 1) #1101obs.
+nrow(yes_subset_lessmeat)
+
+barplot(table(yes_subset_lessmeat$whylessm1)/length(yes_subset_lessmeat$whylessm1) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nFor animal welfare reasons",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm2)/length(yes_subset_lessmeat$whylessm2) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nFor environmental or sustainability reasons, e.g. impact on climate change",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_lessmeat$whylessm3)/length(yes_subset_lessmeat$whylessm3) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nFor financial reasons, e.g. cost of meat or reduced income",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_lessmeat$whylessm4)/length(yes_subset_lessmeat$whylessm4) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nFor health reasons, e.g. to be more healthy or lose weight",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm5)/length(yes_subset_lessmeat$whylessm5) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nFor religious reasons",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_lessmeat$whylessm6)/length(yes_subset_lessmeat$whylessm6) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause of the bad or unpleasant physical reaction eating meat causes me (e.g. food intolerance)",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_lessmeat$whylessm7)/length(yes_subset_lessmeat$whylessm7) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause of concerns about food poisoning",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+barplot(table(yes_subset_lessmeat$whylessm8)/length(yes_subset_lessmeat$whylessm8) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause other people in my household or my friends have reduced their meat consumption or don’t eat meat",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm9)/length(yes_subset_lessmeat$whylessm9) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause of advice from friends or family",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm10)/length(yes_subset_lessmeat$whylessm10) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause of advice from celebrities or influencers",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm11)/length(yes_subset_lessmeat$whylessm11) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause of concerns about where meat comes from",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm12)/length(yes_subset_lessmeat$whylessm12) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nBecause I wanted a change",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm13)/length(yes_subset_lessmeat$whylessm13) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nDue to pregnancy",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm14)/length(yes_subset_lessmeat$whylessm14) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nOther reason",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm15)/length(yes_subset_lessmeat$whylessm15) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nNone of these",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(yes_subset_lessmeat$whylessm16)/length(yes_subset_lessmeat$whylessm16) * 100,
+        main = "Why did you choose to eat less red meat in the last 12 months: \nPrefer not to say",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+
+```
+
+## Why did you choose to eat less or more in the last 12 months
+
+I have not analised these question, few cases. 
+
+```{r pressure5, echo=FALSE}
+
+yes_subset_lessprocmeat <- subset(Wave_4, lessmpf3 == 1) 
+nrow(yes_subset_lessprocmeat) #455 obs, verlo despues, few observations: the same for eat less poultry, eat less fish, less dairy/eggs, less processed food, eat more fruit/vegetables
+
+```
+
+## Which changes are you willing to try in the next 12 months:
+
+
+```{r pressure6, echo=FALSE}
+
+barplot(table(Wave_4$trylessmpfd1),
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating meat",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd1)/length(Wave_4$trylessmpfd1) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating meat",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd2)/length(Wave_4$trylessmpfd2) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nEat less meat",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd3)/length(Wave_4$trylessmpfd3) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating poultry",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd4)/length(Wave_4$trylessmpfd4) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nEat less poultry",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd5)/length(Wave_4$trylessmpfd5) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating fish",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd6)/length(Wave_4$trylessmpfd6) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nEat less fish",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd7)/length(Wave_4$trylessmpfd7) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating / drinking dairy and/or eggs",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd8)/length(Wave_4$trylessmpfd8) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nEat / drink less dairy and/or eat fewer eggs",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "No", "Yes"), #1101 obs
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd_stop_net),
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating meat/poultry/fish/dairy/eggs",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not Applicable", "Stop eating meat\n/poultry/fish/dairy/eggs", "Not willing to stop eating \nmeat/poultry/fish/dairy/eggs"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd_stop_net)/length(Wave_4$trylessmpfd_stop_net) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nStop eating meat/poultry/fish/dairy/eggs",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Stop eating meat\n/poultry/fish/dairy/eggs", "Not willing to stop eating \nmeat/poultry/fish/dairy/eggs"),
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$trylessmpfd_less_net)/length(Wave_4$trylessmpfd_less_net) * 100,
+        main = "Which changes are you willing to try in the next 12 months: \nEat less meat/poultry/fish/dairy/eggs",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Eat less meat/\npoultry/fish/dairy/eggs", "Not willing to eat less \nmeat/poultry/fish/dairy/eggs"), 
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
+
+## Why are you willing to try to stop eating / eat less meat in the next 12 months
+
+I have not analised these questions. Few cases. 
+
+```{r pressure7, echo=FALSE}
+
+yes_subset_willmeat <- subset(Wave_4, trysus1 == 1) 
+nrow(yes_subset_lessprocmeat) #455 obs, verlo despues, few observations: the same for eat less poultry, eat less fish, less dairy/eggs, less processed food
+
+```
+
+## Which of the following reasons explain why you choose to eat meat alternative
+
+I have not analised all the questions in this section. The questions are: 
+
+Have you ever eaten meat alternatives?, 
+Which of the following reasons explain why you choose to eat meat alternatives (MULTIPLE RESPONSES), 
+Would you like to eat more meat alternatives?, 
+Would you like to try eating meat alternatives?,
+In general, how healthy do you think shop-bought meat alternatives are compared to meat? (A LIST OF SIMILAR QUESTIONS),
+Would you like to try including lab-grown meat in your diet, if it became available in this country?,
+Have you ever heard of Genetically modified (GM) food?, 
+Have you ever heard of Gene edited or genome edited food?
+
+
+```{r pressure8, echo=FALSE}
+
+barplot(table(Wave_4$meatalteat),
+        main = "Have you ever eaten meat alternatives?",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not Applicable", "Yes, I \ncurrently eat\n meat \nalternatives", "Yes, I \ncurrently eat \nmeat alternatives", "No, I \nhave never \neaten meat \nalternatives", "I have \nnever heard \nof meat \nalternatives", "Don’t know"), 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$meatalteat)/length(Wave_4$meatalteat) * 100,
+        main = "Have you ever eaten meat alternatives?",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Yes, I \ncurrently eat\n meat \nalternatives", "Yes, I \ncurrently eat \nmeat alternatives", "No, I \nhave never \neaten meat \nalternatives", "I have \nnever heard \nof meat \nalternatives", "Don’t know"), 
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$meatalteat_net),
+        main = "Have you ever eaten meat alternatives?",
+        xlab = "Responses", 
+        ylab = "Observations", 
+        names.arg = c("Not stated", "Not Applicable", "Yes", "No", "Never heard of / Don't know"), 
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+barplot(table(Wave_4$meatalteat_net)/length(Wave_4$meatalteat_net) * 100,
+        main = "Have you ever eaten meat alternatives?",
+        xlab = "Responses", 
+        ylab = "Percentage", 
+        ylim = c(0, 100),
+        names.arg = c("Not stated", "Not Applicable", "Yes", "No", "Never heard of / Don't know"), 
+        col = "lightblue", 
+        cex.main=0.8,
+        cex.names=0.6)
+
+```
